@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Jornada Simbolista · Templo da Subjetividade</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Spectral:wght@400;500&display=swap">
+<style>
+/* ===== Paleta e base ===== */
+:root{--noite:#0c0a1f;--violeta:#2b1858;--prata:#cdd5ee;--ouro:#dcb85f;--ok:#8fe3b8;--erro:#ff93a6;--linha:rgba(220,184,95,.45);
+ --display:'Cormorant Garamond',Georgia,serif;--texto:'Spectral',Georgia,serif}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--texto);color:var(--prata);font-size:16px;line-height:1.5;background:radial-gradient(ellipse at 50% 0%,var(--violeta),var(--noite) 65%) fixed}
+[hidden]{display:none!important}
+main{max-width:1000px;margin:0 auto;padding:18px 14px 40px}
+h1,h2{font-family:var(--display);color:#fff;margin:0;line-height:1.05}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ouro);outline-offset:3px}
+.btn{background:var(--ouro);color:#1a1230;border:0;border-radius:2px;padding:11px 24px;font-family:var(--display);font-size:21px;font-weight:700;min-height:46px}
+.btn.sec{background:none;color:var(--prata);border:1px solid var(--linha)}
+.btn:disabled{opacity:.4}
+.centro{text-align:center}.duo{display:flex;gap:10px;justify-content:center;margin-top:12px}
+/* ===== Início ===== */
+#intro{max-width:640px;margin:4vh auto 0}
+#intro h1{font-size:clamp(42px,10vw,74px);margin-bottom:12px}
+#intro h1 em{font-style:italic;color:var(--ouro)}
+#intro p,#intro li{margin:0 0 8px}
+.jog{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:14px 0}
+.jog input,.jog select{width:100%;background:rgba(12,10,31,.7);border:1px solid var(--linha);border-radius:2px;padding:9px 10px;min-height:44px}
+.jog select option{color:#000}
+.pass{font-size:14px;opacity:.85;margin:0 0 16px;padding-left:18px}
+@media(max-width:520px){.jog{grid-template-columns:1fr}}
+/* ===== Mesa ===== */
+.mesa{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.mapa{flex:2 1 480px}
+.mapa svg{width:100%;height:auto;display:block;background:rgba(12,10,31,.45);border:1px solid var(--linha)}
+.legenda{font-size:13px;opacity:.75;margin:6px 0 0}
+.no{cursor:default;opacity:.5}
+.no circle.c{fill:rgba(12,10,31,.9);stroke-width:2}
+.no text{font-family:var(--display);fill:#fff;text-anchor:middle}
+.no.alvo{opacity:1;cursor:pointer}
+.no.alvo circle.c{stroke:var(--ouro)!important;stroke-width:4;animation:pulso 1.4s ease-in-out infinite}
+@keyframes pulso{50%{stroke-opacity:.3}}
+.liga{stroke:rgba(205,213,238,.25);stroke-width:2}.liga.ativa{stroke:var(--ouro);stroke-width:3.5}
+.peca text{font-size:12px;fill:#150e2a;font-weight:700}
+/* ===== Painel ===== */
+.painel{flex:1 1 260px;display:flex;flex-direction:column;gap:9px}
+.vez-de{font-family:var(--display);font-size:28px;color:#fff;line-height:1.1}
+.aut{font-size:14px;margin:0;opacity:.9}
+.rec{display:flex;align-items:center;gap:10px;justify-content:space-between;border-bottom:1px solid rgba(205,213,238,.15);padding:4px 0}
+.rec b{font-family:var(--display);font-size:24px;color:var(--ouro)}
+.pips{color:var(--ouro);letter-spacing:2px;font-size:20px}.pips i{opacity:.25;font-style:normal}
+.barra{flex:1;height:8px;background:rgba(205,213,238,.2);border-radius:4px;overflow:hidden}.barra i{display:block;height:100%;background:var(--ouro);transition:width .5s}
+.cartas{display:flex;flex-wrap:wrap;gap:6px}
+.carta{background:rgba(220,184,95,.14);border:1px solid var(--ouro);border-radius:3px;padding:4px 9px;font-size:14px;min-height:36px}
+.carta span{font-family:var(--display);color:var(--ouro);margin-right:5px;font-size:18px}
+.msg{margin:2px 0;min-height:44px;font-size:15px}
+.placar{list-style:none;padding:0;margin:0;font-size:14px}.placar li{display:flex;justify-content:space-between;padding:2px 0}
+/* ===== Janela ===== */
+#modal{position:fixed;inset:0;background:rgba(8,6,20,.84);display:grid;place-items:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px));overflow:auto;z-index:5}
+.caixa{width:100%;max-width:600px;background:linear-gradient(var(--violeta),var(--noite));border:1px solid var(--ouro);padding:20px;animation:surge .35s}
+@keyframes surge{from{opacity:0;transform:translateY(10px)}}
+.fase{text-align:center;font-size:14px;color:var(--ouro)}
+.simbolo{font-family:var(--display);font-size:72px;line-height:1.05;text-align:center;color:var(--ouro);text-shadow:0 0 28px rgba(220,184,95,.55)}
+.pergunta{font-family:var(--display);font-size:clamp(22px,4.6vw,27px);text-align:center;margin:4px 0 14px;color:#fff;line-height:1.25}
+blockquote{font-family:var(--display);font-style:italic;font-size:22px;text-align:center;margin:6px 0 12px;color:var(--ouro);line-height:1.3}
+.opcoes{display:flex;flex-direction:column;gap:8px;padding:0;margin:0;list-style:none}
+.opcao{width:100%;text-align:left;background:rgba(12,10,31,.6);border:1px solid var(--linha);padding:11px 13px;display:flex;gap:12px;min-height:50px}
+.opcao:hover:not(:disabled){background:rgba(220,184,95,.12);border-color:var(--ouro)}
+.opcao .l{font-family:var(--display);font-weight:700;font-size:20px;color:var(--ouro)}
+.opcao:disabled{cursor:default}
+.opcao.certa{background:rgba(143,227,184,.16);border-color:var(--ok)}
+.opcao.errada{background:rgba(255,147,166,.16);border-color:var(--erro);animation:treme .4s}
+.opcao.riscada{opacity:.25;text-decoration:line-through}
+@keyframes treme{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.acao{flex:1 1 200px;background:none;border:1px solid var(--linha);padding:9px 12px;font-size:15px;min-height:44px}
+.acao[aria-pressed=true]{background:rgba(220,184,95,.25);border-color:var(--ouro)}.acao:disabled{opacity:.35}
+.risco{font-size:14px;margin:8px 0 0;opacity:.9;min-height:22px}
+.explica{margin-top:14px;border-left:3px solid var(--ouro);padding:2px 0 2px 14px}
+.explica h2{font-size:24px;margin-bottom:4px}.explica.ok h2{color:var(--ok)}.explica.no h2{color:var(--erro)}
+.explica p{margin:0 0 12px}
+/* ===== Final ===== */
+#fim{max-width:660px;margin:3vh auto 0}
+#fim h2{font-size:clamp(34px,8vw,56px);margin-bottom:12px}
+.rk{border-bottom:1px solid rgba(205,213,238,.2);padding:8px 0}
+.rk div:first-child{display:flex;justify-content:space-between;font-family:var(--display);font-size:26px}.rk b{color:var(--ouro)}
+.rk small{font-size:14px;opacity:.85}
+#fim dt{font-family:var(--display);font-size:21px;font-weight:700;color:var(--ouro)}#fim dd{margin:0 0 8px;font-size:15px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<!-- ===== INÍCIO: jogadores, autores e regras ===== -->
+<section id="intro">
+  <h1>A Jornada <em>Simbolista</em></h1>
+  <p>Atravesse a névoa até o Templo da Subjetividade. A cada fase, o mapa mostra caminhos diferentes: escolha entre enigmas seguros, perguntas profundas, poemas ou santuários.</p>
+  <ul class="pass">
+    <li>Responda para ganhar <b>Essência</b>, conquistar <b>Símbolos Sagrados</b> e aumentar sua <b>Subjetividade</b>.</li>
+    <li>Gaste <b>Iluminação</b> (✧) para eliminar respostas ou <b>aposte Essência</b> para ganhar mais.</li>
+    <li>As fases ficam mais difíceis. Vence quem tiver mais pontos quando todos chegarem ao Templo.</li>
+  </ul>
+  <div class="jog" id="jog"></div>
+  <p class="pass" id="descAut"></p>
+  <div class="centro"><button class="btn" id="comecar">Abrir o mapa</button></div>
+</section>
+
+<!-- ===== JOGO: mapa + painel ===== -->
+<section id="jogo" hidden>
+  <div class="mesa">
+    <div class="mapa">
+      <svg id="mapa" viewBox="0 0 560 340" role="group" aria-label="Mapa da jornada"></svg>
+      <p class="legenda">◈ Enigma · ◆ Enigma Profundo · ✎ Poema · ✧ Santuário · ♜ Templo. Os pontos sob cada nó indicam o nível. Toque num nó brilhante para ver a prévia.</p>
+    </div>
+    <aside class="painel" id="painel"></aside>
+  </div>
+</section>
+
+<div id="modal" hidden role="dialog" aria-modal="true"><div class="caixa" id="caixa"></div></div>
+
+<!-- ===== FINAL ===== -->
+<section id="fim" hidden>
+  <h2 id="venc"></h2><div id="rank"></div>
+  <dl style="margin:18px 0">
+    <dt>Subjetividade</dt><dd>O poema parte do mundo interior, não da realidade descrita com exatidão.</dd>
+    <dt>Misticismo</dt><dd>Busca pelo espiritual e pelo que a razão não alcança.</dd>
+    <dt>Símbolo e sugestão</dt><dd>A imagem aponta para algo além dela; sugerir vale mais que nomear.</dd>
+    <dt>Sinestesia e musicalidade</dt><dd>Sentidos se misturam e o som das palavras vira música.</dd>
+  </dl>
+  <button class="btn" id="reiniciar">Nova jornada (mapa novo)</button>
+</section>
+</main>
+
+<script>
+/* =====================================================
+   DADOS — autores (habilidades passivas), perguntas, curiosidades
+   ===================================================== */
+const AUT={
+ cs:{n:"Cruz e Sousa",g:"☾",d:"Brancura: acertos em Enigmas Profundos rendem +60 de Essência."},
+ ag:{n:"Alphonsus de Guimaraens",g:"✝",d:"Místico: cada Santuário concede +1 Iluminação extra."},
+ mm:{n:"Mallarmé",g:"✦",d:"Sugestão: a primeira Intuição de cada fase é gratuita."},
+ bd:{n:"Baudelaire",g:"❦",d:"Flores do Mal: ao errar, você ainda ganha +1 Subjetividade."}};
+const COR=["#cdd5ee","#dcb85f","#f2a3c0"];
+/* k=conceito, g=glifo, v=verso (poemas), nv=nível 1–3, a=índice da resposta certa */
+const Q=[
+{k:"Torre",g:"♜",nv:1,q:"Uma moça sobe sozinha à torre para sonhar com a lua. O que a TORRE simboliza?",o:["Poder militar","Isolamento e desejo de elevar-se acima do real","Progresso industrial","Segurança do lar"],a:1,e:"Em «Ismália», de Alphonsus de Guimaraens, a torre é refúgio e ascensão rumo a um ideal inalcançável."},
+{k:"Lua",g:"☾",nv:1,q:"A LUA aparece o tempo todo na poesia simbolista. O que ela sugere?",o:["A hora do dia","Prova da gravidade","Mistério, sonho e o lado noturno da alma","Uma festa popular"],a:2,e:"Contra a clareza do Realismo, os simbolistas preferem a penumbra: a lua ilumina pouco e sugere o que a razão não alcança."},
+{k:"Mar",g:"≈",nv:1,q:"Olhar para o MAR, na poesia simbolista, é muitas vezes olhar para dentro de si. Por quê?",o:["É rota comercial","É esporte de verão","Marca o limite do território","Seu infinito e suas profundezas lembram o inconsciente"],a:3,e:"Imenso e sem fim, o mar é metáfora da alma: o que não se vê na superfície é o que o poeta quer explorar."},
+{k:"Cor branca",g:"◌",nv:1,q:"Cruz e Sousa escreveu muito sobre brancuras e luares. Que busca essa cor expressa?",o:["Falta de imaginação","Pureza e transcendência espiritual","Frieza da ciência","Orgulho nacional"],a:1,e:"No Simbolismo as cores carregam sentidos. O branco sugere purificação e libertação da dor e da matéria."},
+{k:"Misticismo",g:"✧",nv:1,q:"Névoa, incenso, sinos e capelas aparecem nos poemas do movimento. Que traço reforçam?",o:["Crítica social direta","Descrição científica","Misticismo e espiritualidade","Humor popular"],a:2,e:"Contra o cientificismo do fim do século XIX, os simbolistas buscaram o sagrado e o invisível."},
+{k:"Subjetividade",g:"◐",nv:1,q:"Por que o Simbolismo é uma arte da SUBJETIVIDADE?",o:["Copia a realidade como fotografia","Só trata de política","Parte das emoções e visões interiores do poeta","Usa linguagem técnica"],a:2,e:"Em reação ao Realismo, olha-se para dentro: sonhos, angústias e intuições valem mais que a observação objetiva."},
+{k:"Cisne",g:"❦",nv:2,q:"No poema de Mallarmé, o cisne fica preso no lago congelado. O que representa?",o:["A riqueza burguesa","O poeta: livre em espírito, preso à realidade","Um mensageiro de guerra","A rotina do trabalho"],a:1,e:"Branco, belo e aprisionado, o cisne traduz a angústia do artista que sonha o ideal num mundo concreto."},
+{k:"Sinestesia",g:"❂",nv:2,q:"Qual expressão é uma SINESTESIA?",o:["A noite era escura","Tão branca como a neve","Um som perfumado de violinos","O mar é um espelho"],a:2,e:"Sinestesia mistura sentidos (aqui, audição e olfato). Baudelaire defendeu que cores, sons e perfumes se correspondem."},
+{k:"Sugestão",g:"✦",nv:2,q:"Qual verso é MAIS simbolista?",o:["Hoje choveu das três às cinco.","A fábrica abriu às sete.","O mar tinha ondas de dois metros.","Na alma, um luar de silêncios que ninguém ousa nomear."],a:3,e:"Para Mallarmé, nomear destrói parte do prazer do poema; sugerir é sonhar."},
+{k:"Albatroz",g:"⌃",nv:2,q:"Em «O Albatroz», de Baudelaire, a ave é majestosa no céu e desajeitada no convés. Quem ela simboliza?",o:["O marinheiro","O poeta, incompreendido fora do mundo dos sonhos","O rei dos mares","Presságio de tempestade"],a:1,e:"Baudelaire, precursor do movimento, mostra o artista grandioso na imaginação e ridicularizado na vida prática."},
+{k:"Vogais",g:"Ⓐ",nv:2,q:"No poema «Vogais», Rimbaud associa cada vogal a uma cor. Que ideia isso ilustra?",o:["Neutralidade científica","Correspondência entre som, cor e emoção","Descrição fiel da paisagem","Crítica ao governo"],a:1,e:"Som e cor se respondem: é a lógica das correspondências que sustenta a sinestesia simbolista."},
+{k:"Poema: torre, lua e mar",g:"✎",nv:2,v:"Na torre branca, a lua vela o mar, e a alma, sem nome, aprende a se calar.",q:"Que leitura simbolista combina melhor com o poema?",o:["Descrição de um farol real","Alma que busca elevação e silêncio diante do infinito","Relatório de navegação","Crítica à indústria"],a:1,e:"Torre (elevação), lua (mistério) e mar (inconsciente) sugerem um estado interior, não uma paisagem."},
+{k:"Poema: perfume azul",g:"✎",nv:2,v:"Um perfume azul soa nos sinos da tarde.",q:"Que recurso domina este verso?",o:["Sinestesia","Hipérbole","Ironia","Antítese"],a:0,e:"Olfato, visão e audição se misturam: perfume azul que soa. É a sinestesia, marca do movimento."},
+{k:"Marco histórico",g:"❡",nv:3,q:"Qual obra de Cruz e Sousa, de 1893, marca o início do Simbolismo no Brasil?",o:["Dom Casmurro","Os Sertões","Iracema","Broquéis"],a:3,e:"Em 1893 saíram «Missal» (prosa) e «Broquéis» (poesia). Cruz e Sousa, poeta negro, é o maior nome do movimento no país."},
+{k:"Musicalidade",g:"♪",nv:3,q:"Em «Vozes veladas, veludosas vozes», de Cruz e Sousa, repete-se o som «v». Que recurso é esse?",o:["Hipérbole","Ironia","Antítese","Aliteração"],a:3,e:"A aliteração repete consoantes. Verlaine pedia a música antes de tudo: o som importa tanto quanto o sentido."},
+{k:"Alphonsus de Guimaraens",g:"✝",nv:3,q:"Qual poeta ligado a Mariana (MG), autor de «Ismália», fez do misticismo e da morte da amada seus temas?",o:["Olavo Bilac","Castro Alves","Alphonsus de Guimaraens","Machado de Assis"],a:2,e:"O poeta do misticismo católico transformou a perda da noiva em lirismo de sonho, morte e espiritualidade."},
+{k:"Poema: branco",g:"✎",nv:3,v:"Todo branco que anseio é neve de outro mundo.",q:"O que o BRANCO sugere neste verso?",o:["Falta de cor na paisagem","Desejo de pureza e de um absoluto além da matéria","Apenas o inverno","Cansaço do poeta"],a:1,e:"O branco, cor-chave de Cruz e Sousa, não descreve neve: sugere um mundo espiritual e transcendente."},
+{k:"Poema: cisne",g:"✎",nv:3,v:"O cisne dorme no gelo do lago sem fim; o poeta sonha o voo que não é seu.",q:"Por que este verso é simbolista?",o:["Descreve uma ave com exatidão","Faz do cisne símbolo do artista entre sonho e realidade","Critica o governo","Explica um fenômeno natural"],a:1,e:"O cisne preso no gelo é o poeta: o símbolo diz o que o artista sente, sem explicar."}];
+const CURIO=["O Simbolismo nasceu na França; o manifesto de Jean Moréas é de 1886.","Baudelaire, de «As Flores do Mal» (1857), é considerado precursor do movimento.","Verlaine e Mallarmé fizeram da música e da sugestão o centro da poesia.","No Brasil, Cruz e Sousa só foi plenamente reconhecido depois de sua época."];
+const BONUS=[150,100,50,25];
+
+/* =====================================================
+   ESTADO E UTILITÁRIOS
+   ===================================================== */
+let J=[],NOS=[],vez=0,ordem=0,bar={},msg="";
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const embaralhar=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+const mostrar=id=>{["intro","jogo","fim"].forEach(s=>$("#"+s).hidden=s!==id);window.scrollTo(0,0)};
+const janela=h=>{$("#caixa").innerHTML=h;$("#modal").hidden=false};
+const fechar=()=>$("#modal").hidden=true;
+
+/* Tela de início: um jogador por linha, com escolha de autor */
+$("#jog").innerHTML=[0,1,2].map(k=>'<input id="n'+k+'" maxlength="14" placeholder="Jogador '+(k+1)+(k>1?' (opcional)':'')+'" value="'+(k<2?"Jogador "+(k+1):"")+'"><select id="a'+k+'">'+Object.keys(AUT).map((c,i)=>'<option value="'+c+'"'+(i===k?" selected":"")+">"+AUT[c].n+"</option>").join("")+"</select>").join("");
+$("#descAut").innerHTML="<b>Habilidades:</b> "+Object.values(AUT).map(a=>a.n+" — "+a.d).join(" ");
+
+/* =====================================================
+   MAPA ALEATÓRIO (muda a cada partida)
+   Portal → 4 fases com 3 nós → Templo. Cada nó liga a 2 nós da fase seguinte.
+   ===================================================== */
+function gerarMapa(){
+  const X=t=>45+t*94,Y=[65,170,275];
+  NOS=[{id:0,t:0,k:"i",x:X(0),y:170,to:[]}];let ant=[0];
+  for(let t=1;t<=4;t++){
+    /* cada fase tem sempre 1 Enigma comum + 2 tipos sorteados (profundo, poema ou santuário) */
+    const tipos=embaralhar(["e"].concat(embaralhar(["a","p","s"]).slice(0,2)));
+    const ids=tipos.map((k,i)=>{const n={id:NOS.length,t,k,x:X(t),y:Y[i],to:[]};NOS.push(n);return n.id});
+    ant.forEach(id=>NOS[id].to=t===1?ids.slice():embaralhar(ids).slice(0,2));
+    ant=ids;
+  }
+  const f={id:NOS.length,t:5,k:"f",x:X(5),y:170,to:[]};NOS.push(f);ant.forEach(id=>NOS[id].to=[f.id]);
+}
+/* Informações de cada tipo de nó (nível sobe com a fase) */
+function info(n){const t=n.t,L=[0,1,1,2,3];return {
+ e:{g:"◈",nome:"Enigma",nv:L[t],rec:80+20*t,desc:"Decifre um símbolo. Caminho mais seguro: ganha Essência, um Símbolo Sagrado e Subjetividade."},
+ a:{g:"◆",nome:"Enigma Profundo",nv:Math.min(3,L[t]+1),rec:160+40*t,desc:"Pergunta mais difícil e recompensa dobrada. Vale o risco?"},
+ p:{g:"✎",nome:"Poema",nv:t<3?2:3,rec:120+30*t,desc:"Leia um verso inédito e interprete seus símbolos."},
+ s:{g:"✧",nome:"Santuário",nv:0,rec:0,desc:"Sem pergunta. Escolha entre recuperar Iluminação ou ganhar Essência e aprender uma curiosidade."},
+ f:{g:"♜",nome:"Templo da Subjetividade",nv:3,rec:250,desc:"Ritual final com a pergunta mais difícil. Quem chega ganha bônus de chegada."}}[n.k]}
+
+/* Desenha mapa, ligações, nós e peças dos jogadores */
+function mapa(){
+  const s=$("#mapa"),p=J[vez],alvo=p.fim?[]:NOS[p.no].to;s.innerHTML="";
+  const E=(tag,at,tx)=>{const e=document.createElementNS("http://www.w3.org/2000/svg",tag);for(const k in at)e.setAttribute(k,at[k]);if(tx!==undefined)e.textContent=tx;return e};
+  NOS.forEach(n=>n.to.forEach(d=>{const m=NOS[d];s.appendChild(E("line",{x1:n.x,y1:n.y,x2:m.x,y2:m.y,class:"liga"+(n.id===p.no&&alvo.includes(d)?" ativa":"")}))}));
+  NOS.forEach(n=>{
+    const ehAlvo=alvo.includes(n.id),i=n.k==="i"?{g:"☽",nome:"Portal",nv:0}:info(n);
+    const g=E("g",{class:"no"+(ehAlvo?" alvo":""),tabindex:ehAlvo?0:-1,role:"button","aria-label":i.nome+(i.nv?", nível "+i.nv:""),"aria-disabled":!ehAlvo});
+    g.appendChild(E("circle",{class:"c",cx:n.x,cy:n.y,r:26,stroke:n.k==="a"||n.k==="f"?"#dcb85f":n.k==="s"?"#8fe3b8":n.k==="p"?"#f2a3c0":"#cdd5ee"}));
+    g.appendChild(E("text",{x:n.x,y:n.y+9,"font-size":26},i.g));
+    if(i.nv)g.appendChild(E("text",{x:n.x,y:n.y+45,"font-size":12},"●".repeat(i.nv)));
+    if(ehAlvo){g.onclick=()=>previa(n);g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();previa(n)}}}
+    s.appendChild(g);
+  });
+  J.forEach((j,k)=>{const n=NOS[j.no],c=E("g",{class:"peca"});
+    c.appendChild(E("circle",{cx:n.x-18+k*18,cy:n.y-36,r:9,fill:j.cor,stroke:"#fff","stroke-width":k===vez?3:1}));
+    c.appendChild(E("text",{x:n.x-18+k*18,y:n.y-32,"text-anchor":"middle"},j.g));s.appendChild(c)});
+}
+
+/* Painel: recursos, habilidade, cartas de Símbolos e placar */
+function painel(){
+  const p=J[vez];
+  $("#painel").innerHTML='<div class="vez-de"><span style="color:'+p.cor+'">'+p.g+"</span> "+esc(p.nome)+'</div><p class="aut"><b>'+AUT[p.a].n+"</b>. "+AUT[p.a].d+"</p>"
+  +'<div class="rec"><span>Essência</span><b>'+p.ess+"</b></div>"
+  +'<div class="rec"><span>Iluminação</span><span class="pips">'+"✧".repeat(p.lum)+"<i>"+"✧".repeat(5-p.lum)+"</i></span></div>"
+  +'<div class="rec"><span>Subjetividade</span><span class="barra"><i style="width:'+p.sub*10+'%"></i></span><span>'+p.sub+"/10</span></div>"
+  +'<div class="rec"><span>Símbolos Sagrados</span></div><div class="cartas">'+(p.simb.map(k=>'<button class="carta" data-k="'+k+'"><span>'+Q[k].g+"</span>"+esc(Q[k].k)+"</button>").join("")||"<small>Nenhum ainda</small>")+"</div>"
+  +'<p class="msg" aria-live="polite">'+msg+"</p>"
+  +'<ul class="placar">'+J.map(j=>'<li><span style="color:'+j.cor+'">'+j.g+" "+esc(j.nome)+(j.fim?" (no Templo)":"")+"</span><b>"+j.ess+"</b></li>").join("")+"</ul>";
+  document.querySelectorAll(".carta").forEach(b=>b.onclick=()=>{const q=Q[b.dataset.k];resultado(q.g,q.k,q.e)});
+}
+
+/* =====================================================
+   FLUXO DE TURNOS
+   ===================================================== */
+function iniciar(){
+  J=[];[0,1,2].forEach(k=>{const n=$("#n"+k).value.trim();if(n)J.push({nome:n,a:$("#a"+k).value,cor:COR[k],g:AUT[$("#a"+k).value].g,no:0,t:0,ess:50,lum:2,sub:0,simb:[],fim:false,gf:-1})});
+  if(!J.length)J.push({nome:"Jogador 1",a:"cs",cor:COR[0],g:"☾",no:0,t:0,ess:50,lum:2,sub:0,simb:[],fim:false,gf:-1});
+  vez=0;ordem=0;bar={};gerarMapa();mostrar("jogo");novaVez();
+}
+function novaVez(){msg="Escolha seu próximo caminho no mapa.";mapa();painel()}
+function proxima(){
+  if(J.every(j=>j.fim))return finalizar();
+  do{vez=(vez+1)%J.length}while(J[vez].fim);novaVez();
+}
+/* Prévia do nó: mostra prós e contras antes de decidir */
+function previa(n){
+  const i=info(n);
+  janela('<div class="simbolo">'+i.g+'</div><p class="pergunta">'+i.nome+(i.nv?" · nível "+"I".repeat(i.nv):"")+"</p><p>"+i.desc+"</p>"+(i.rec?"<p>Recompensa base: <b>+"+i.rec+" Essência</b>.</p>":"")+'<div class="duo"><button class="btn sec" id="nao">Voltar</button><button class="btn" id="sim">Entrar</button></div>');
+  $("#nao").onclick=fechar;$("#sim").onclick=()=>{fechar();entrar(n)};$("#sim").focus();
+}
+function entrar(n){
+  const p=J[vez];p.no=n.id;p.t=n.t;mapa();
+  if(n.k==="s")return santuario();
+  desafio(info(n),()=>n.k==="f"?chegada():proxima());
+}
+
+/* =====================================================
+   DESAFIO: pergunta com decisões (Intuição e Aposta)
+   ===================================================== */
+function sacar(nv,poema){
+  const ch=nv+(poema?"p":"q");
+  if(!bar[ch]||!bar[ch].length)bar[ch]=embaralhar(Q.map((_,i)=>i).filter(i=>!!Q[i].v===poema&&Q[i].nv===nv));
+  return bar[ch].pop();
+}
+function subir(p,n){let m="";for(let x=0;x<n;x++)if(p.sub<10){p.sub++;if(p.sub%3===0&&p.lum<5){p.lum++;m=" Marco de Subjetividade: +1 Iluminação."}}return m}
+function desafio(i,fim){
+  const p=J[vez],k=sacar(i.nv,i.g==="✎"),q=Q[k];let aposta=false,intu=false;
+  const ops=embaralhar(q.o.map((t,n)=>({t,n})));
+  const custo=()=>AUT[p.a].n==="Mallarmé"&&p.gf!==p.t?0:1;
+  janela('<div class="fase">'+i.nome+" · nível "+"I".repeat(i.nv)+'</div><div class="simbolo">'+q.g+"</div>"+(q.v?"<blockquote>«"+esc(q.v)+"»</blockquote>":"")
+   +'<p class="pergunta">'+esc(q.q)+'</p><ul class="opcoes">'+ops.map((o,n)=>'<li><button class="opcao" data-n="'+o.n+'"><span class="l">'+"ABCD"[n]+"</span><span>"+esc(o.t)+"</span></button></li>").join("")+"</ul>"
+   +'<div class="acoes"><button class="acao" id="bi"></button><button class="acao" id="ba" aria-pressed="false"></button></div><p class="risco" id="rs"></p><div id="expl"></div>');
+  const bs=[...document.querySelectorAll(".opcao")];
+  const rot=()=>{
+    $("#bi").textContent=intu?"Intuição usada":"Intuição: elimina 2 respostas ("+(custo()?"−1 ✧":"grátis nesta fase")+")";
+    $("#bi").disabled=intu||(custo()&&p.lum<1);
+    $("#ba").textContent="Apostar 50 Essência"+(aposta?" (ativa)":"");$("#ba").disabled=!aposta&&p.ess<50;$("#ba").setAttribute("aria-pressed",aposta);
+    $("#rs").textContent=aposta?"Apostando: acerto rende +"+(i.rec+50)+", erro custa −50.":"Acerto rende +"+i.rec+". Errar não custa Essência.";
+  };
+  rot();
+  $("#bi").onclick=()=>{if(custo())p.lum--;else p.gf=p.t;intu=true;
+    embaralhar(bs.filter(b=>+b.dataset.n!==q.a)).slice(0,2).forEach(b=>{b.disabled=true;b.classList.add("riscada")});rot();painel()};
+  $("#ba").onclick=()=>{aposta=!aposta;rot()};
+  bs.forEach(b=>b.onclick=()=>{
+    const certo=+b.dataset.n===q.a;let extra="";
+    bs.forEach(x=>{x.disabled=true;if(+x.dataset.n===q.a)x.classList.add("certa")});$("#bi").disabled=$("#ba").disabled=true;
+    if(certo){
+      let g=i.rec+(aposta?50:0);if(i.g==="◆"&&p.a==="cs"){g+=60;extra=" Brancura: +60 de Essência."}
+      p.ess+=g;extra=" +"+g+" Essência."+extra+subir(p,1);if(!p.simb.includes(k)){p.simb.push(k);extra+=" Símbolo Sagrado conquistado: "+q.k+"."}
+    }else{b.classList.add("errada");if(aposta){p.ess-=50;extra=" A aposta custou −50 Essência."}if(p.a==="bd"){extra+=" Flores do Mal: +1 Subjetividade."+subir(p,1)}}
+    msg="";painel();
+    $("#expl").innerHTML='<div class="explica '+(certo?"ok":"no")+'"><h2>'+(certo?"Véu aberto!":"O símbolo ainda se esconde")+"</h2><p>"+esc(q.e)+"</p><p><b>"+extra+'</b></p><button class="btn" id="ok">Continuar</button></div>';
+    $("#ok").onclick=()=>{fechar();fim()};$("#ok").focus();
+  });
+}
+
+/* Santuário: escolha entre recarregar Iluminação ou ganhar Essência e aprender */
+function santuario(){
+  const p=J[vez];
+  janela('<div class="simbolo">✧</div><p class="pergunta">Santuário</p><p class="centro">Um lugar de silêncio. O que você faz?</p><div class="acoes"><button class="acao" id="m1">Meditar: +2 Iluminação'+(p.a==="ag"?" (+1 do Místico)":"")+'</button><button class="acao" id="m2">Ler um verso: +80 Essência e uma curiosidade</button></div>');
+  $("#m1").onclick=()=>{const g=2+(p.a==="ag"?1:0);p.lum=Math.min(5,p.lum+g);painel();resultado("✧","Você meditou","A névoa se abre: sua Iluminação aumentou.",proxima)};
+  $("#m2").onclick=()=>{p.ess+=80;painel();resultado("✎","Você leu um verso (+80 Essência)",CURIO[Math.floor(Math.random()*CURIO.length)],proxima)};
+}
+/* Chegada ao Templo: bônus pela ordem */
+function chegada(){
+  const p=J[vez],b=BONUS[Math.min(ordem,3)];ordem++;p.fim=true;p.ess+=b;mapa();painel();
+  resultado("♜",p.nome+" chegou ao Templo!","Bônus de chegada: +"+b+" Essência.",proxima);
+}
+/* Cartão simples de resultado: (glifo, título, texto, ação ao continuar) */
+function resultado(g,t,x,cb){
+  janela('<div class="simbolo">'+g+'</div><p class="pergunta">'+esc(t)+'</p><p class="centro">'+esc(x)+'</p><div class="centro"><button class="btn" id="ok">Continuar</button></div>');
+  $("#ok").onclick=()=>{fechar();cb&&cb()};$("#ok").focus();
+}
+
+/* =====================================================
+   FINAL: Essência + 100 por Símbolo + 25 por ponto de Subjetividade
+   ===================================================== */
+function finalizar(){
+  const tot=j=>j.ess+100*j.simb.length+25*j.sub,r=J.slice().sort((a,b)=>tot(b)-tot(a));
+  $("#venc").textContent=J.length>1?r[0].nome+" venceu a jornada!":"Você alcançou o Templo!";
+  $("#rank").innerHTML=r.map((j,k)=>'<div class="rk"><div><span style="color:'+j.cor+'">'+(k+1)+"º "+j.g+" "+esc(j.nome)+"</span><b>"+tot(j)+'</b></div><small>'+AUT[j.a].n+": Essência "+j.ess+" + Símbolos "+j.simb.length+"×100 + Subjetividade "+j.sub+"×25. Símbolos: "+(j.simb.map(k=>Q[k].k).join(", ")||"nenhum")+".</small></div>").join("");
+  mostrar("fim");
+}
+$("#comecar").onclick=iniciar;
+$("#reiniciar").onclick=()=>mostrar("intro");
+</script>
+</body>
+</html>
